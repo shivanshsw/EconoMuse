@@ -7,7 +7,7 @@ const initialState = {
     {
       id: 1,
       type: 'ai',
-      content: '👋 Hello! I\'m your AI Financial Mentor with 15 years of CFP experience. I can help you with **budgeting**, _investment planning_, and achieving your financial goals. How can I assist you today? 💰',
+      content: '👋 Hello! I\'m your AI Financial Mentor. I can help you with **budgeting**, *investment planning*, and achieving your financial goals. How can I assist you today? 💰',
       timestamp: new Date().toISOString()
     }
   ],
@@ -19,6 +19,7 @@ const initialState = {
     savings: '',
     goal: ''
   }
+
 }
 
 function chatReducer(state, action) {
@@ -60,6 +61,7 @@ function chatReducer(state, action) {
   }
 }
 
+// eslint-disable-next-line react/prop-types
 export function ChatProvider({ children }) {
   const [state, dispatch] = useReducer(chatReducer, initialState)
 
@@ -97,6 +99,7 @@ export function ChatProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useChat() {
   const context = useContext(ChatContext)
   if (!context) {

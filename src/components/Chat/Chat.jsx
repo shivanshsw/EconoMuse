@@ -2,7 +2,7 @@ import { useState } from 'react'
 import ChatHistory from './ChatHistory'
 import MessageInput from './MessageInput'
 import FinanceForm from './FinanceForm'
-import ModeToggle from './ModeToggle'
+import {ModeToggle} from './ModeToggle'
 import { useChat } from '../../context/ChatContext'
 import { getAIResponse } from './GeminiService'
 import './Chat.css'
@@ -13,7 +13,10 @@ function Chat() {
 
   const handleSendMessage = async (message) => {
     if (!message.trim()) return
-
+    const updatedMessages = [
+      ...state.messages,
+      { type: 'user', content: message }
+    ]
     // Add user message
     addMessage({
       type: 'user',
@@ -25,7 +28,7 @@ function Chat() {
 
     try {
       // Get AI response
-      const aiResponse = await getAIResponse(state.messages, message, state.userProfile)
+      const aiResponse = await getAIResponse(updatedMessages, message, state.userProfile,state.mode)
       
       addMessage({
         type: 'ai',
@@ -53,7 +56,7 @@ function Chat() {
     }
     
     if (quickActions[action]) {
-      handleSendMessage(quickActions[action])
+      handleSendMessage(quickActions[action]).then(r => console.log(r.message))
     }
   }
 

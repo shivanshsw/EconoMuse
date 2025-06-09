@@ -1,8 +1,11 @@
 
 
 import { GoogleGenAI } from "@google/genai";
+
+
 const GEMINI_API_KEY = "AIzaSyC6L-Dh1OHYk3IJ9g7tskF-iDnRGgXo1xQ"
-export async function getAIResponse(chatHistory) {
+
+export async function getAIResponse(chatHistory,userMessage,userProfile,mode) {
   if (!GEMINI_API_KEY) {
     throw new Error('Gemini API key not configured. Please add VITE_GEMINI_API_KEY to your environment variables.')
   }
@@ -13,7 +16,32 @@ export async function getAIResponse(chatHistory) {
     .map(msg => `${msg.type}: ${msg.content}`)
     .join('\n')
 
-  const systemPrompt = `Act as a Certified Financial Planner (CFP) with  experience in Indian financial markets. 
+  let systemPrompt="";
+  if (mode==="goal-oriented") {
+
+    console.log(userProfile)
+     systemPrompt=`Act as a Certified Financial Planner (CFP) with  experience in financial markets. 
+    user details:${userProfile()}
+
+Recent conversation:
+${recentHistory}
+present prompt-${userMessage}
+
+Style Guidelines:
+- Use **bold** for important amounts and key financial terms
+- Use _underline_ for actionable items and important steps
+- Include exactly 2 relevant emojis per message (not more)
+- Keep responses conversational but professional
+- Focus on practical, actionable advice for Indian financial landscape
+- Use INR (₹) for all monetary references
+- Consider Indian tax laws, investment options (SIP, PPF, ELSS, etc.)
+- Mention specific Indian investment instruments when relevant
+
+Answer the user's question with personalized, practical financial guidance.Keep the responses short and straightforward `
+
+  }
+  else{
+    systemPrompt = `Act as a Certified Financial Planner (CFP) with  experience in financial markets. 
 
 Recent conversation:
 ${recentHistory}
@@ -29,12 +57,13 @@ Style Guidelines:
 - Mention specific Indian investment instruments when relevant
 
 Answer the user's question with personalized, practical financial guidance.Keep the responses short and straightforward `
+  }
 
 
   const ai = new GoogleGenAI({ apiKey: "AIzaSyC6L-Dh1OHYk3IJ9g7tskF-iDnRGgXo1xQ" });
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     contents: systemPrompt,
   }).catch(console.error);
 

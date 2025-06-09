@@ -1,6 +1,7 @@
 import { useChat } from '../../context/ChatContext'
 
-function ModeToggle() {
+
+export function ModeToggle() {
   const { state, setMode } = useChat()
 
   return (
@@ -19,6 +20,8 @@ function ModeToggle() {
       </button>
     </div>
   )
-}
 
-export default ModeToggle
+}
+export default ModeToggle;
+
+
