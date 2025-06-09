@@ -334,7 +334,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 215, 0, 0.1);
   border-radius: var(--border-radius);
-  padding: var(--spacing-sm) var(--spacing-md);
+
   color: var(--text-light);
   font-size: 0.875rem;
   font-family: inherit;
@@ -387,7 +387,8 @@
   }
   
   .chat-sidebar {
-    padding: var(--spacing-lg);
+
+
   }
 }
 

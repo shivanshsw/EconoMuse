@@ -12,8 +12,10 @@ function Navigation() {
   return (
     <nav className="navbar">
       <div className="nav-brand">
-        <h1>FinanceHub</h1>
-        <span>Policy Simulator & AI Mentor</span>
+        <Link to="/" style={{ textDecoration: "none" }}>
+        <h1>EconoMuse</h1>
+        </Link>
+        <span>Econ-Sim & AI Mentor</span>
       </div>
       <div className="nav-links">
         <Link 
@@ -26,7 +28,7 @@ function Navigation() {
           to="/chat" 
           className={`nav-link ${location.pathname === '/chat' ? 'active' : ''}`}
         >
-          🤖 AI Guru
+          🤖 AI Mentor
         </Link>
       </div>
     </nav>
@@ -43,11 +45,11 @@ function App() {
             <Routes>
               <Route path="/" element={
                 <div className="welcome-screen">
-                  <h2>Welcome to FinanceHub</h2>
+                  <h2>Welcome to EconoMuse</h2>
                   <p>Explore economic policies and get AI-powered financial guidance</p>
                   <div className="welcome-buttons">
                     <Link to="/simulator" className="welcome-btn primary">
-                      Start Policy Simulation
+                      Start Simulator
                     </Link>
                     <Link to="/chat" className="welcome-btn secondary">
                       Chat with AI Mentor

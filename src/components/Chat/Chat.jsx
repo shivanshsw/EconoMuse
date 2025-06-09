@@ -60,8 +60,8 @@ function Chat() {
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <h2>AI Financial Mentor</h2>
-        <p>Get personalized financial advice from your AI CFP with 15+ years experience</p>
+
+
         <ModeToggle />
       </div>
 

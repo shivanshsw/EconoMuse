@@ -30,9 +30,14 @@
 }
 
 * {
+  /* For Firefox */
+  scrollbar-width: none;
+  /* For IE and Edge */
+  -ms-overflow-style: none;
+}
 
-
-
+*::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, Opera */
 }
 
 body {
