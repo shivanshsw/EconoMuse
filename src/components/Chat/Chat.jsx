@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import ChatHistory from './ChatHistory'
 import MessageInput from './MessageInput'
-import FinanceForm from './FinanceForm'
-import {ModeToggle} from './ModeToggle'
+
 import { useChat } from '../../context/ChatContext'
 import { getAIResponse } from './GeminiService'
 import './Chat.css'
@@ -12,28 +11,34 @@ function Chat() {
   const [inputValue, setInputValue] = useState('')
 
   const handleSendMessage = async (message) => {
-    if (!message.trim()) return
-    const updatedMessages = [
-      ...state.messages,
-      { type: 'user', content: message }
-    ]
-    // Add user message
+    if (!message.trim()) return;
+
+    // Add user message to UI immediately
     addMessage({
       type: 'user',
       content: message
-    })
+    });
 
-    setInputValue('')
-    setTyping(true)
+    setInputValue('');
+    setTyping(true);
 
     try {
-      // Get AI response
-      const aiResponse = await getAIResponse(updatedMessages, message, state.userProfile,state.mode)
-      
+// Get AI response
+      const historyBeforeNewMessage = state.messages;
+
+      // Get AI response with OLD history + new message
+      const aiResponse = await getAIResponse(
+          historyBeforeNewMessage,
+          message,
+          () => state.userProfile, // Function wrapper
+          state.mode
+      );
+
+      // Add AI response
       addMessage({
         type: 'ai',
         content: aiResponse
-      })
+      });
     } catch (error) {
       console.error('Error getting AI response:', error)
       addMessage({
@@ -54,40 +59,32 @@ function Chat() {
       'emergency': 'How much should I keep in emergency fund?',
       'retirement': 'What should be my retirement planning strategy?'
     }
-    
+
     if (quickActions[action]) {
-      handleSendMessage(quickActions[action]).then(r => console.log(r.message))
+      handleSendMessage(quickActions[action])
     }
   }
 
   return (
-    <div className="chat-container">
-      <div className="chat-header">
-
-
-        <ModeToggle />
-      </div>
-
-      <div className="chat-content">
-        <div className="chat-main">
-          <ChatHistory />
-          <MessageInput
-            value={inputValue}
-            onChange={setInputValue}
-            onSend={handleSendMessage}
-            onQuickAction={handleQuickAction}
-            disabled={state.isTyping}
-          />
+      <div className="chat-container">
+        <div className="chat-header">
+          <h2>AI Financial Mentor</h2>
+          <p>Get personalized financial advice from your AI CFP with 15+ years experience</p>
         </div>
 
-        {state.mode === 'goal-oriented' && (
-          <div className="chat-sidebar">
-            <FinanceForm />
+        <div className="chat-content learning-mode">
+          <div className="chat-main">
+            <ChatHistory />
+            <MessageInput
+                value={inputValue}
+                onChange={setInputValue}
+                onSend={handleSendMessage}
+                onQuickAction={handleQuickAction}
+                disabled={state.isTyping}
+            />
           </div>
-        )}
+        </div>
       </div>
-    </div>
   )
 }
-
 export default Chat

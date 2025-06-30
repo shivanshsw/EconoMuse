@@ -44,20 +44,6 @@ function App() {
           <main className="main-content">
             <Routes>
               <Route path="/" element={
-                <div className="welcome-screen">
-                  <h2>Welcome to EconoMuse</h2>
-                  <p>Explore economic policies and get AI-powered financial guidance</p>
-                  <div className="welcome-buttons">
-                    <Link to="/simulator" className="welcome-btn primary">
-                      Start Simulator
-                    </Link>
-                    <Link to="/chat" className="welcome-btn secondary">
-                      Chat with AI Mentor
-                    </Link>
-                  </div>
-                </div>
-              } />
-              <Route path="/simulator" element={
                 <SimulatorProvider>
                   <Simulator />
                 </SimulatorProvider>

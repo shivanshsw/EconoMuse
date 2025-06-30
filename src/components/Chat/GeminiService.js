@@ -11,37 +11,13 @@ export async function getAIResponse(chatHistory,userMessage,userProfile,mode) {
   }
 
   // Build chat history context
-  const recentHistory = chatHistory
-    .slice(-5) // Last 5 messages for context
-    .map(msg => `${msg.type}: ${msg.content}`)
-    .join('\n')
-
-  let systemPrompt="";
-  if (mode==="goal-oriented") {
-
-    console.log(userProfile)
-     systemPrompt=`Act as a Certified Financial Planner (CFP) with  experience in financial markets. 
-    user details:${userProfile()}
-
-Recent conversation:
-${recentHistory}
-present prompt-${userMessage}
-
-Style Guidelines:
-- Use **bold** for important amounts and key financial terms
-- Use _underline_ for actionable items and important steps
-- Include exactly 2 relevant emojis per message (not more)
-- Keep responses conversational but professional
-- Focus on practical, actionable advice for Indian financial landscape
-- Use INR (₹) for all monetary references
-- Consider Indian tax laws, investment options (SIP, PPF, ELSS, etc.)
-- Mention specific Indian investment instruments when relevant
-
-Answer the user's question with personalized, practical financial guidance.Keep the responses short and straightforward `
-
-  }
-  else{
-    systemPrompt = `Act as a Certified Financial Planner (CFP) with  experience in financial markets. 
+  const recentHistory = [
+    ...chatHistory.slice(-9), // last 9 messages
+    { type: 'user', content: userMessage } // add current message manually
+  ]
+      .map(msg => `${msg.type}: ${msg.content}`)
+      .join('\n');
+  const systemPrompt = `Act as a Certified Financial Planner (CFP) with  experience in financial markets. 
 
 Recent conversation:
 ${recentHistory}
@@ -57,13 +33,13 @@ Style Guidelines:
 - Mention specific Indian investment instruments when relevant
 
 Answer the user's question with personalized, practical financial guidance.Keep the responses short and straightforward `
-  }
+
 
 
   const ai = new GoogleGenAI({ apiKey: "AIzaSyC6L-Dh1OHYk3IJ9g7tskF-iDnRGgXo1xQ" });
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.0-flash",
     contents: systemPrompt,
   }).catch(console.error);
 
